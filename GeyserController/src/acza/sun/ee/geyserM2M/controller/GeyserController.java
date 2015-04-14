@@ -3,7 +3,7 @@
  * AUTHOR:	Cloete A.H
  * PROJECT:	M-Eng, Inteligent geyser M2M system.	
  * ---------------------------------------------------------------------------------------------------------
- * DESCRIPTION: A reference implementation of an M2M geyser controller
+ * DESCRIPTION: A reference Java implementation of an M2M geyser controller
  * ---------------------------------------------------------------------------------------------------------
  * PURPOSE: Will be used to control a GeyserSimulator application
  * ---------------------------------------------------------------------------------------------------------
@@ -19,6 +19,16 @@ public class GeyserController {
 		System.out.println("Geyser Controller started.");
 		
 		//To-do: Pseudo code
+		
+		
+		//Test communications with server:
+		GeyserProxy geyser = new GeyserProxy();
+			
+		while(true)
+		{
+			System.out.println(geyser.getStatus());
+		}
+		
 	}
 }
 
