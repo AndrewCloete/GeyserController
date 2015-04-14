@@ -16,28 +16,34 @@ package acza.sun.ee.geyserM2M.controller;
 
 import java.util.LinkedList;
 
-public class GeyserProxy{
+public abstract class GeyserProxy{
 	
 	//Queues as the broker between the API and the communication pipe. (Look familiar?)
-	private LinkedList<String> commandQueue = new LinkedList<String>();
-	private LinkedList<String> replyQueue = new LinkedList<String>();
+	protected LinkedList<String> commandQueue = new LinkedList<String>();
+	protected LinkedList<String> replyQueue = new LinkedList<String>();
 	
 	
-	public GeyserProxy(){
-		TCPClient client = new TCPClient(3000, commandQueue, replyQueue);
-		boolean is_connected = client.connect();
-		Thread tcp_client_thread = new Thread(client);
-		//TODO: Design a strategy because if is_connected == false, this will give NullPointerException. 
-		tcp_client_thread.start(); 
+	public GeyserProxy(){ 
+		/*
+		 * TODO: It there a way of handing a reference of commandQueue and replyQueue 
+		 * to child classes using this constructor and the super method.
+		 * Or is protected fine?
+		 */
 	}
-	
-	
 	
 	//---------------  COMMAND METHODS -----------------
 	//API commands used to control geyser
 	
 	public String openLoop(){
 		return this.promptServer("open");
+	}
+	
+	public String elementOn(){
+		return this.promptServer("elementon");
+	}
+	
+	public String elementOff(){
+		return this.promptServer("elementoff");
 	}
 	
 	public String getStatus(){
