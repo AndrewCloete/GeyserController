@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 
 public class GeyserController {
 
+
 	public static void main(String [] args){
 		System.out.println("Geyser Controller started.");
 		
@@ -27,13 +28,17 @@ public class GeyserController {
 		
 		
 		
-		//Testing: Simple semi-automatic controller
+		//-------------- Prototype: Simple semi-automatic controller -------------------
+		//This is just to get a feel for how well the controller plays with the simulator
+		
 		double setpointHigh = 46;
 		double setpointLow = 45;
+		boolean element_state = false;
 		
 		double internal_temp = 0;
 		
 		JSONParser parser=new JSONParser();
+		System.out.println(geyser.openLoop());
 		while(true)
 		{
 			
@@ -51,16 +56,20 @@ public class GeyserController {
 		      }
 			
 			if(internal_temp <= setpointLow){
-				System.out.println(geyser.openLoop());
-				System.out.println(geyser.elementOn());
+				element_state = true;
+				System.out.println(geyser.setElement(element_state));
 			}
 			else if(internal_temp >= setpointHigh){
-				System.out.println(geyser.openLoop());
-				System.out.println(geyser.elementOff());
+				element_state = false;
+				System.out.println(geyser.setElement(element_state));
 			}
-			
-		
+			else{
+				System.out.println(geyser.setElement(element_state));
+			}
+
 		}
+		
+		// -----------------------------------------------------------------------------
 		
 	}
 }

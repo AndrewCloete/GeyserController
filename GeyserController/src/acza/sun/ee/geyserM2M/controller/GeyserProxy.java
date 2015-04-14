@@ -38,12 +38,11 @@ public abstract class GeyserProxy{
 		return this.promptServer("open");
 	}
 	
-	public String elementOn(){
-		return this.promptServer("elementon");
-	}
-	
-	public String elementOff(){
-		return this.promptServer("elementoff");
+	public String setElement(boolean state){
+		if(state == true)
+			return this.promptServer("elementon");
+		else
+			return this.promptServer("elementoff");
 	}
 	
 	public String getStatus(){
