@@ -3,8 +3,8 @@
  * AUTHOR:	Cloete A.H
  * PROJECT:	M-Eng, Inteligent geyser M2M system.	
  * ---------------------------------------------------------------------------------------------------------
- * DESCRIPTION: This object is used to communicate with geyser Firmware. In this specific case, this proxy
- * uses a TCP client as the underlying means of communication. However a user of this object is unaware of this.
+ * DESCRIPTION: Abstract class that defines how to interface with geyser firmware, i.e. provides a 
+ * 				software handle for the fimrware API. It does not specify a communication protocol
  * ---------------------------------------------------------------------------------------------------------
  * PURPOSE: 
  * ---------------------------------------------------------------------------------------------------------

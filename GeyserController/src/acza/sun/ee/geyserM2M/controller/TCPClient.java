@@ -3,7 +3,7 @@
  * AUTHOR:	Cloete A.H
  * PROJECT:	M-Eng, Inteligent geyser M2M system.	
  * ---------------------------------------------------------------------------------------------------------
- * DESCRIPTION: 
+ * DESCRIPTION: Abstracts TCP socket communications to message queues. Client side implementation.
  * ---------------------------------------------------------------------------------------------------------
  * PURPOSE: 
  * ---------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public class TCPClient implements Runnable {
 	
 	 /*
 	  * TODO: Design connection life cycle
-	  	* i.e  what happens of server goes down
+	  	* i.e  what happens if server goes down
 	  	* or connection breaks etc.
 	  	* consider adding connect(), reconnect() and close() methods.
 	  */
