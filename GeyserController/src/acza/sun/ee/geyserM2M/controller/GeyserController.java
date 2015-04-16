@@ -54,6 +54,7 @@ public class GeyserController {
 
 	public static void main(String [] args){
 		
+		System.out.println("Geyser Controller started.");
 		
 		/* *************************************** PSEUDO ******************************************
 		 * 
@@ -85,9 +86,21 @@ public class GeyserController {
 		 */
 		
 		
-		System.out.println("Geyser Controller started.");
 		
-		//TODO: Pseudo code
+		
+		//-------------- Prototype: HTTP M2M registration -------------------
+		//This is just to get a feel for how well the controller plays with the OM2M platform
+		final String GEYSER_ID = "sim_geyser_1";
+		final String APP_URI = "localhost:8181/om2m/gscl/applications";
+		final String CONTAINER_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers";
+		final String CONTAINER_ID = "DATA";
+		final String CONTENT_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers/" + CONTAINER_ID + "/contentInstances";
+		
+		M2MHTTPClient.post(APP_URI, M2MxmlFactory.registerApplication(GEYSER_ID));
+		M2MHTTPClient.post(CONTAINER_URI, M2MxmlFactory.addContainer(CONTAINER_ID, (long)5));
+		
+		//----------------------------------------------------------------------
+		
 		
 		GeyserProxy geyser = new TCPGeyserProxy(3000);
 		
@@ -130,11 +143,16 @@ public class GeyserController {
 				System.out.println(geyser.setElement(element_state));
 			}
 			
+			//----------------------------------------------------------------------
+			
+			
+			
+			//Prototype: Post data synchronously to GSCL
+			M2MHTTPClient.post(CONTENT_URI, "Tmp: " + internal_temp + ", Element: " + element_state);
 			
 			try {
 				Thread.sleep(CONTROL_PERIOD*1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

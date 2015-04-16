@@ -16,7 +16,7 @@ import java.net.*;
 
 public class M2MHTTPClient {
 
-	public static void HTTPclientPOST(String getURI){
+	public static void get(String getURI){
 		
 		try{
 			URL url = new URL(getURI);
@@ -35,7 +35,7 @@ public class M2MHTTPClient {
 			
 			String line;
 			while((line = bin.readLine()) != null){
-				System.out.println(line);
+				System.out.println(line);	//Debug reply
 			}
 
 		}catch (MalformedURLException e){
@@ -46,7 +46,7 @@ public class M2MHTTPClient {
 	}	
 	
 	
-	public static void HTTPclientPOST(String postURI, String postData){
+	public static void post(String postURI, String postData){
 		try{
 			URL url = new URL("http://" + postURI);
 			HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
@@ -65,7 +65,7 @@ public class M2MHTTPClient {
 
 			String line;
 			while((line = bin.readLine()) != null){
-				System.out.println(line);
+				System.out.println(line); //Debug reply
 			}
 
 		}catch (MalformedURLException e){
