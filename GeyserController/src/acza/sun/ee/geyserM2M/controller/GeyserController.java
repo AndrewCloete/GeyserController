@@ -38,7 +38,7 @@
  *  				an individual request to each geyser every minute.)
  */
 
-//TYPE 1 -- VERBOSE
+//TYPE 2 -- VERBOSE
 
 package acza.sun.ee.geyserM2M.controller;
 
@@ -83,21 +83,6 @@ public class GeyserController {
 		 * 
 		 * **************************************************************************************** 
 		 */
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		System.out.println("Geyser Controller started.");
