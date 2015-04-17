@@ -42,6 +42,9 @@
 
 package acza.sun.ee.geyserM2M.controller;
 
+import org.eclipse.om2m.commons.obix.Obj;
+import org.eclipse.om2m.commons.obix.Str;
+import org.eclipse.om2m.commons.obix.io.ObixEncoder;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
@@ -66,28 +69,18 @@ public class GeyserController {
 		 * Set appropriate server properties
 		 * Start Jetty server
 		 * 
+		 * Search OM2M for previous registration
 		 * Register and subscribe to M2M
 		 * Confirm registration.
 		 * 
 		 * Main control loop:
-		 	* Something similar to below
-		 * 
-		 * ------------------------------- LISTENERS ----------------------------
-		 * @Override doGet()
-		 	* Since this is the VERBOSE version, doGet() wont be implemented
-		 	* A temporary one will be implemented just to debug the server.
-		 * 
-		 * @Override doPost()
-		 	* Schedule configuration settings will be posted here.
-		 	* The controller must subscribe to a configuration container which will echo changes here
-		 	* 
+		 	* Control geyser using open-loop mode
+		 	* Post geyserdata in oBIX format to OM2M NSCL
 		 * 
 		 * **************************************************************************************** 
 		 */
 		
-		
-		
-		
+
 		//-------------- Prototype: HTTP M2M registration -------------------
 		//This is just to get a feel for how well the controller plays with the OM2M platform
 		final String GEYSER_ID = "sim_geyser_1";
@@ -147,8 +140,15 @@ public class GeyserController {
 			
 			
 			
-			//Prototype: Post data synchronously to GSCL
-			M2MHTTPClient.post(CONTENT_URI, "Tmp: " + internal_temp + ", Element: " + element_state);
+			//Prototype: Post data synchronously to GSCL in oBIX format
+			Obj obj = new Obj();
+        	obj.add(new Str("type","Geyser"));
+        	obj.add(new Str("location","EC2"));
+        	obj.add(new Str("appId","sim_geyser_1")); 
+        	obj.add(new Str("ElementState",""+element_state));
+        	obj.add(new Str("Internal Temperature",""+internal_temp));
+        	
+			M2MHTTPClient.post(CONTENT_URI, ObixEncoder.toString(obj));
 			
 			try {
 				Thread.sleep(CONTROL_PERIOD*1000);
