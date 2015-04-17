@@ -45,6 +45,7 @@ package acza.sun.ee.geyserM2M.controller;
 import org.eclipse.om2m.commons.obix.Obj;
 import org.eclipse.om2m.commons.obix.Str;
 import org.eclipse.om2m.commons.obix.io.ObixEncoder;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
@@ -83,13 +84,13 @@ public class GeyserController {
 
 		//-------------- Prototype: HTTP M2M registration -------------------
 		//This is just to get a feel for how well the controller plays with the OM2M platform
-		final String GEYSER_ID = "sim_geyser_1";
+		final String GEYSER_ID = args[0]; //(1)
 		final String APP_URI = "localhost:8181/om2m/gscl/applications";
 		final String CONTAINER_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers";
 		final String CONTAINER_ID = "DATA";
 		final String CONTENT_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers/" + CONTAINER_ID + "/contentInstances";
 		
-		M2MHTTPClient.post(APP_URI, M2MxmlFactory.registerApplication(GEYSER_ID));
+		M2MHTTPClient.post(APP_URI, M2MxmlFactory.registerApplication(GEYSER_ID));	//(3)
 		M2MHTTPClient.post(CONTAINER_URI, M2MxmlFactory.addContainer(CONTAINER_ID, (long)5));
 		
 		//----------------------------------------------------------------------
@@ -148,7 +149,23 @@ public class GeyserController {
         	obj.add(new Str("ElementState",""+element_state));
         	obj.add(new Str("Internal Temperature",""+internal_temp));
         	
-			M2MHTTPClient.post(CONTENT_URI, ObixEncoder.toString(obj));
+        	/*
+        	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        	<obj>
+        	    <str val="Geyser" name="type"/>
+        	    <str val="EC2" name="location"/>
+        	    <str val="sim_geyser_1" name="appId"/>
+        	    <str val="false" name="ElementState"/>
+        	    <str val="48.332233" name="Internal Temperature"/>
+        	</obj>
+        	*/
+        	
+        	String obix = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><obj><str val=\"Geyser\" name=\"type\"/><str val=\"EC2\" name=\"location\"/><str val=\"sim_geyser_1\" name=\"appId\"/><str val=\"" + element_state + "\" name=\"ElementState\"/><str val=\"" + internal_temp + "\" name=\"Internal Temperature\"/></obj>";
+        	
+        	
+        	//(2)
+			//M2MHTTPClient.post(CONTENT_URI, ObixEncoder.toString(obj)); 
+        	M2MHTTPClient.post(CONTENT_URI, obix);
 			
 			try {
 				Thread.sleep(CONTROL_PERIOD*1000);
@@ -167,5 +184,31 @@ public class GeyserController {
 /*
  * ---------------------------------------------------------------------------------------------------------
  * NOTES:
+ *
+ * (1) 
+ * To set the command line arguments:
+ * 		Right click on GeyserController.java --> Properties --> Run/Debug settings --> Edit... --> Arguments
+ * 
+ * 
+ * (2) 
+ * For some reason, when you export the project as a runnable jar, then this oBIX method throws an exception.
+ * It is not known why yet. So for now, I'm ignoring the "obj" variable and simply hard coded the XML oOBIX string.
+ * Since OM2M is planning to deprecate oBIX, this is not too much of a worry. The only reason why I am 
+ * formatting the geyser data in to oBIX in the first place, is so that I can look at the contentInctances
+ * on the OM2M resource browser. In the future I simply want to use plain XML, and use JAXB to do the serialisation.
+ * 
+ * 
+ * (3) NB!
+ * When you export the project as a runnable jar, Eclipse tries to be clever and throws away certain "unnecessary" 
+ * files to keep the size down. In particular, it throws away jaxb.index which ought to be in 
+ * org.eclipse.om2m.commons.resources (JAXB uses this file to determine which classes can be marshaled to XML).
+ * I don't know how to tell eclipse not to do this, but one solution is to simple add the file after the jar has 
+ * been created. You can use Archive Manager to do this easily.
+ * 
+ * It might be worth investigating using the command line instead to get the export right. But a more permanent 
+ * solution would be to use Maven!! Since you are staring to use external libraries, it is seriously time to 
+ * bite the bullet and get Maven up and running.
+ * 
+ * 
  * ---------------------------------------------------------------------------------------------------------
  */
