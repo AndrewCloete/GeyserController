@@ -84,11 +84,12 @@ public class GeyserController {
 
 		//-------------- Prototype: HTTP M2M registration -------------------
 		//This is just to get a feel for how well the controller plays with the OM2M platform
-		final String GEYSER_ID = args[0]; //(1)
-		final String APP_URI = "localhost:8181/om2m/gscl/applications";
-		final String CONTAINER_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers";
+		final String IP_ADD =   args[0];//"52.10.236.177";//"localhost";//
+		final String GEYSER_ID = args[1]; //(1)
+		final String APP_URI = IP_ADD + ":8181/om2m/gscl/applications";
+		final String CONTAINER_URI = IP_ADD + ":8181/om2m/gscl/applications/" + GEYSER_ID + "/containers";
 		final String CONTAINER_ID = "DATA";
-		final String CONTENT_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers/" + CONTAINER_ID + "/contentInstances";
+		final String CONTENT_URI = IP_ADD + ":8181/om2m/gscl/applications/" + GEYSER_ID + "/containers/" + CONTAINER_ID + "/contentInstances";
 		
 		M2MHTTPClient.post(APP_URI, M2MxmlFactory.registerApplication(GEYSER_ID));	//(3)
 		M2MHTTPClient.post(CONTAINER_URI, M2MxmlFactory.addContainer(CONTAINER_ID, (long)5));
@@ -101,7 +102,7 @@ public class GeyserController {
 		//-------------- Prototype: Simple semi-automatic controller -------------------
 		//This is just to get a feel for how well the controller plays with the simulator
 		
-		double setpointHigh = 46;
+		double setpointHigh = 55;
 		double setpointLow = 45;
 		boolean element_state = false;
 		
@@ -144,7 +145,7 @@ public class GeyserController {
 			//Prototype: Post data synchronously to GSCL in oBIX format
 			Obj obj = new Obj();
         	obj.add(new Str("type","Geyser"));
-        	obj.add(new Str("location","EC2"));
+        	obj.add(new Str("location","Stellenbosch"));
         	obj.add(new Str("appId","sim_geyser_1")); 
         	obj.add(new Str("ElementState",""+element_state));
         	obj.add(new Str("Internal Temperature",""+internal_temp));
@@ -160,7 +161,7 @@ public class GeyserController {
         	</obj>
         	*/
         	
-        	String obix = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><obj><str val=\"Geyser\" name=\"type\"/><str val=\"EC2\" name=\"location\"/><str val=\"sim_geyser_1\" name=\"appId\"/><str val=\"" + element_state + "\" name=\"ElementState\"/><str val=\"" + internal_temp + "\" name=\"Internal Temperature\"/></obj>";
+        	String obix = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><obj><str val=\"Geyser\" name=\"type\"/><str val=\"Stellenbosch\" name=\"location\"/><str val=\"sim_geyser_1\" name=\"appId\"/><str val=\"" + element_state + "\" name=\"ElementState\"/><str val=\"" + internal_temp + "\" name=\"Internal Temperature\"/></obj>";
         	
         	
         	//(2)
@@ -202,7 +203,7 @@ public class GeyserController {
  * When you export the project as a runnable jar, Eclipse tries to be clever and throws away certain "unnecessary" 
  * files to keep the size down. In particular, it throws away jaxb.index which ought to be in 
  * org.eclipse.om2m.commons.resources (JAXB uses this file to determine which classes can be marshaled to XML).
- * I don't know how to tell eclipse not to do this, but one solution is to simple add the file after the jar has 
+ * I don't know how to tell eclipse not to do this, but one solution is to simply add the file after the jar has 
  * been created. You can use Archive Manager to do this easily.
  * 
  * It might be worth investigating using the command line instead to get the export right. But a more permanent 
